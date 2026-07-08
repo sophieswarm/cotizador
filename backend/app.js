@@ -4,7 +4,9 @@ import cors from 'cors';
 import { fetchSheet } from './service.js';
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: ['https://sophieswarm.github.io/cotizador/', 'http://localhost:5500']
+}));
 
 app.get('/sheet', async (req, res) => {
   try {
