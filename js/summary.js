@@ -1,9 +1,8 @@
 
 import { sel, COMP_KEYS, WA_NUMBER, STORE_NAME } from './state.js';
-import { fmt } from './utils.js';
+import { fmt, showToast } from './utils.js';
 
 export function updateSummary() {
-  const alerts= [];
   COMP_KEYS.forEach(key => {
     const el = document.getElementById(`sum-${key.replace(/ /g, "_")}`);
     if (sel[key]) {
@@ -16,7 +15,7 @@ export function updateSummary() {
   });
 }
 
-export function updateTotal(alerts) {
+export function updateTotal() {
   const total = COMP_KEYS.reduce((s, k) => s + (sel[k]?.price || 0), 0);
   document.getElementById("total-display").textContent = fmt(total);
 
@@ -25,7 +24,15 @@ export function updateTotal(alerts) {
   document.getElementById("prog-bar").style.width      = `${(count / 8) * 100}%`;
 
   const allSelected = count === 8;
+  const waBtn = document.getElementById("btn-wa");
   document.getElementById("btn-quote").disabled = !allSelected;
+
+  waBtn.onclick = (e) => {
+    if (!allSelected) {
+      e.preventDefault();
+      showToast("Selecciona los 8 componentes para generar tu cotización y contactar por WhatsApp");
+    }
+  };
 
   if (allSelected) {
     const lines = COMP_KEYS.map(k =>
@@ -34,21 +41,13 @@ export function updateTotal(alerts) {
     const msg = encodeURIComponent(
       `Hola ${STORE_NAME}! Quiero cotizar el siguiente PC Gamer:\n\n${lines}\n\n*TOTAL: ${fmt(total)}*\n\nPor favor confirmame disponibilidad y datos de pago 🙏`
     );
-    document.getElementById("btn-wa").href = `https://wa.me/${WA_NUMBER}?text=${msg}`;
-  }
-  else {
-    alerts.push({ type:"danger", msg:`Por favor selecciona todos los componentes` });
+    waBtn.href = `https://wa.me/${WA_NUMBER}?text=${msg}`;
+  } else {
+    waBtn.removeAttribute("href");
   }
 
-  renderSummaryAlerts(alerts);
+
 }
 
 
-function renderSummaryAlerts(alerts) {
-  document.getElementById("compat-alerts").innerHTML = alerts.map(a => `
-    <div class="alert alert-${a.type}">
-      <span class="alert-icon">${a.type === "danger" ? "🔴" : "🟡"}</span>
-      <div>${a.msg}</div>
-    </div>`).join("");
-}
 
