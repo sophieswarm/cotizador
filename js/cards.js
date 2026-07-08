@@ -6,6 +6,7 @@ import { checkCompat }            from './compat.js';
 import { updateSummary, updateTotal } from './summary.js';
 
 export function buildCards() {
+  console.log("case data", DATA["GABINETE"]);
   const container = document.getElementById("comp-cards");
   COMP_KEYS.forEach(key => {
     const k    = key.replace(/ /g, "_");

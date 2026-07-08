@@ -5,7 +5,7 @@ import { fetchSheet } from './service.js';
 const app = express();
 
 app.use(cors({
-  origin: ['https://sophieswarm.github.io', 'http://localhost:5500']
+  origin: ['https://sophieswarm.github.io', 'http://localhost:5500', 'http://127.0.0.1:5500']
 }));
 
 app.get('/sheet', async (req, res) => {

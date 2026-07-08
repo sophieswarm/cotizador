@@ -1,4 +1,4 @@
-const SHEET_URL= "https://cotizador-neon.vercel.app/sheet";
+const SHEET_URL= "http://localhost:3000/sheet";
 
 export async function getSheetData() {
   try {
