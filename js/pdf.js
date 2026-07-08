@@ -12,7 +12,7 @@ export async function generatePDF() {
   doc.setFillColor(10, 10, 18);
   doc.rect(0, 0, W, 52, "F");
 
-| doc.setFont("helvetica","bold");
+ doc.setFont("helvetica","bold");
   doc.setFontSize(22);
   doc.setTextColor(255, 255, 255);
   doc.text("COTIZACIÓN PC GAMER", M, 22);
