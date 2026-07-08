@@ -21,7 +21,7 @@ export function buildCards() {
       <div class="comp-body">
         ${key === "GABINETE" ? buildImageGrid(key, k) : buildSelect(key, k)}
         <div class="comp-meta" id="meta-${k}" style="display:none">
-          <div>
+          <div class="comp-meta-info">
             <div class="comp-price" id="price-${k}"></div>
             <div class="comp-sku"   id="sku-${k}"></div>
           </div>

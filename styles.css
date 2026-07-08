@@ -11,13 +11,14 @@
     --warn:       #ff6b35;
     --danger:     #ef4444;
     --success:    #22c55e;
-    --whatsapp:   #25d366;
+    --whatsapp:   #54CF7A;
     --text:       #000000;
     --muted:      #8892a4;
+    --overview:   #54CF7A;
     --border:     #E5E5E5;
     --white:      #ffffff;
 
-    /* ══════════════════════════════════════════
+    /*
     colores por variable */
     --accent-08:  color-mix(in srgb, var(--accent) 8%, transparent);
     --accent-13:  color-mix(in srgb, var(--accent) 13%, transparent);
@@ -34,11 +35,11 @@
     --danger-33:  color-mix(in srgb, var(--danger) 33%, transparent);
 
     --whatsapp-33:  color-mix(in srgb, var(--whatsapp) 33%, transparent);
-    --whatsapp-dark: color-mix(in srgb, var(--whatsapp) 85%, black); /* hover shade */
+    --whatsapp-dark: color-mix(in srgb, var(--whatsapp) 85%, black); 
 
-    /* ══════════════════════════════════════════
-       3. gradientes y sombras
-       ══════════════════════════════════════════ */
+    /*
+     3. gradientes y sombras
+     */
     --accent-glow:        var(--accent-27);
     --gradient-brand:      linear-gradient(135deg, var(--accent2), var(--accent));
     --gradient-title:      linear-gradient(90deg, var(--white) 0%, var(--accent) 100%);
@@ -63,7 +64,7 @@
     overflow-x: hidden;
   }
 
-  /* ─── FONDO ANIMADO ─── */
+
 
   /* ─── HEADER ─── */
   header {
@@ -164,22 +165,32 @@
   select option { background: var(--bg-input); color: var(--text); }
 
   .comp-meta {
-    margin-top: 10px;
-    display: flex; gap: 16px; flex-wrap: wrap;
+    margin: 12px -18px -14px -18px;
+    padding: 10px 20px;
+    background: var(--overview);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
   }
+  
+
   .comp-price {
     font-family: 'Rajdhani', sans-serif;
     font-size: 20px; font-weight: 700;
-    color: var(--accent);
+    color: var(--white);
+    
   }
+
   .comp-sku { font-size: 11px; color: var(--muted); padding-top: 4px; }
   .comp-stock {
-    font-size: 11px; font-weight: 600; padding-top: 4px;
+    font-size: 11px; font-weight: 600;
     display: flex; align-items: center; gap: 4px;
   }
-  .comp-stock.ok { color: var(--success); }
-  .comp-stock.low { color: var(--warn); }
-  .comp-stock.out { color: var(--danger); }
+  .comp-stock.ok {  color: var(--white); }
+  .comp-stock.low { color: var(--white); }
+  .comp-stock.out {   color: var(--white); }
   .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
 
   /* ─── ALERTAS COMPATIBILIDAD ─── */
