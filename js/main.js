@@ -16,9 +16,11 @@ function resetAll() {
   COMP_KEYS.forEach(key => {
     sel[key] = null;
     const k  = key.replace(/ /g, "_");
-    document.getElementById(`sel-${k}`).value = "";
+    const select = document.getElementById(`sel-${k}`);
+    if (select) select.value = "";
     hideMeta(k);
   });
+  document.querySelectorAll(".case-tile.selected").forEach(tile => tile.classList.remove("selected"));
   _compat();
   updateSummary();
   updateTotal();
