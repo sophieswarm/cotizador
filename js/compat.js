@@ -1,4 +1,5 @@
 import { sel } from './state.js';
+import { renderAlerts } from './utils.js';
 
 
 function checkMBCPU(pm, cpu, alerts) {
@@ -40,14 +41,6 @@ function checkCaseMB(gab, pm, alerts) {
   const formats = gab.formFactor.split(",").map(s => s.trim());
   if (!formats.includes(pm.formFactor))
     alerts.push({ type:"danger", msg:`<b>Gabinete incompatible:</b> El gabinete no soporta el formato <b>${pm.formFactor}</b> de la placa madre.` });
-}
-
-function renderAlerts(alerts) {
-  document.getElementById("compat-alerts").innerHTML = alerts.map(a => `
-    <div class="alert alert-${a.type}">
-      <span class="alert-icon">${a.type === "danger" ? "🔴" : "🟡"}</span>
-      <div>${a.msg}</div>
-    </div>`).join("");
 }
 
 

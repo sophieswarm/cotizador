@@ -1,8 +1,6 @@
 
 import { sel, COMP_KEYS, WA_NUMBER, STORE_NAME } from './state.js';
-import { fmt }  from './utils.js';
-import { showToast } from './utils.js';
-
+import { fmt, renderAlerts } from './utils.js';
 
 
 export async function generatePDF() {
@@ -88,5 +86,5 @@ export async function generatePDF() {
   doc.text(`${STORE_NAME} · whatsapp.me/${WA_NUMBER}`, W / 2, 290, { align:"center" });
 
   doc.save(`Cotizacion_PC_Gamer_${cotNum}.pdf`);
-  showToast("📄 Cotización descargada correctamente");
+  renderAlerts([{ type: "warn", msg: "📄 Cotización descargada correctamente" }], { append: true, autoDismiss: 2800 });
 }

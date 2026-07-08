@@ -282,16 +282,6 @@
     color: var(--accent); margin: 0;
   }
 
-  /* TOAST */
-  #toast {
-    margin-bottom: 16px; background: var(--bg-card); border: 1px solid var(--accent);
-    border-radius: 10px; padding: 14px 20px;
-    font-size: 13px; color: var(--text);
-    box-shadow: 0 8px 32px #000a;
-    opacity: 0; transform: translateY(10px);
-    transition: all .3s; pointer-events: none;
-  }
-  #toast.show { opacity: 1; transform: none; }
 
   /* CUSTOM CARD */
   .case-grid {

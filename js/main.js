@@ -7,7 +7,7 @@ import { sel, COMP_KEYS }         from './state.js';
 import { hideMeta }               from './meta.js';
 import { checkCompat as _compat } from './compat.js';
 import { updateSummary }          from './summary.js';
-import { showToast }              from './utils.js';
+import { renderAlerts as renderUtilsAlerts } from './utils.js';
 
 window.generatePDF = generatePDF;
 window.resetAll    = resetAll;
@@ -22,7 +22,7 @@ function resetAll() {
   _compat();
   updateSummary();
   updateTotal();
-  showToast("↺ Selección reiniciada");
+  renderUtilsAlerts([{ type: "warn", msg: "↺ Selección reiniciada" }], { append: true, autoDismiss: 2800 });
 }
 
 // Init

@@ -2,21 +2,25 @@ export function fmt(n) {
   return "$" + n.toLocaleString("es-CL");
 }
 
-export function showToast(msg) {
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 2800);
-}
-
-export function showCompatAlert(msg, type = "warn") {
+export function renderAlerts(alerts, options = {}) {
+  const { append = false, autoDismiss = 0 } = options;
   const container = document.getElementById("compat-alerts");
   if (!container) return;
-  const alert = document.createElement("div");
-  alert.className = `alert alert-${type}`;
-  alert.innerHTML = `<span class="alert-icon">${type === "danger" ? "🔴" : "🟡"}</span><div>${msg}</div>`;
-  container.insertAdjacentElement("afterbegin", alert);
-  setTimeout(() => {
-    if (alert.parentNode) alert.parentNode.removeChild(alert);
-  }, 2800);
+
+  if (!append) container.innerHTML = "";
+
+  alerts.forEach(a => {
+    const alert = document.createElement("div");
+    alert.className = `alert alert-${a.type}`;
+    alert.innerHTML = `<span class="alert-icon">${a.type === "danger" ? "🔴" : "🟡"}</span><div>${a.msg}</div>`;
+    if (append) container.insertAdjacentElement("afterbegin", alert);
+    else container.appendChild(alert);
+
+    if (autoDismiss > 0) {
+      setTimeout(() => {
+        if (alert.parentNode) alert.parentNode.removeChild(alert);
+      }, autoDismiss);
+    }
+  });
 }
+
