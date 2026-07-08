@@ -1,6 +1,6 @@
 
 import { sel, COMP_KEYS, WA_NUMBER, STORE_NAME } from './state.js';
-import { fmt, showToast } from './utils.js';
+import { fmt, showCompatAlert } from './utils.js';
 
 export function updateSummary() {
   COMP_KEYS.forEach(key => {
@@ -30,7 +30,7 @@ export function updateTotal() {
   waBtn.onclick = (e) => {
     if (!allSelected) {
       e.preventDefault();
-      showToast("Selecciona los 8 componentes para generar tu cotización y contactar por WhatsApp");
+      showCompatAlert("Selecciona los 8 componentes para generar tu cotización y contactar por WhatsApp");
     }
   };
 
