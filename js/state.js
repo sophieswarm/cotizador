@@ -8,7 +8,7 @@ export const ICONS = {
   "MEMORIA RAM":"💾","SSD":"💿","GPU":"🎮","FUENTE":"🔌","GABINETE":"📦"
 };
 
-export const WA_NUMBER  = "56912345678";
+export const WA_NUMBER  = "56921816067";
 export const STORE_NAME = "Invasión Gamer";
 
 export const sel = {};
