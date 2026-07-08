@@ -2,7 +2,7 @@
 import { sel, COMP_KEYS, WA_NUMBER, STORE_NAME } from './state.js';
 import { fmt }  from './utils.js';
 import { showToast } from './utils.js';
-import jsPDFModule from 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+
 
 
 export async function generatePDF() {
