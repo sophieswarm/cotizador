@@ -51,24 +51,26 @@ function checkGenCompat(selected, alerts) {
   const gradeOrder = { "BAJO": 1, "MEDIO": 2, "ALTO": 3, "SUPERIOR": 4 };
 
   const graded = components.filter(c => c.grade && gradeOrder[c.grade]);
-  if (graded.length < 3) return;
+  if (graded.length < 5) return;
 
   const gradeCounts = { "BAJO": [], "MEDIO": [], "ALTO": [], "SUPERIOR": [] };
   graded.forEach(c => gradeCounts[c.grade].push(c.name));
 
-  const highEnd   = [...gradeCounts.ALTO, ...gradeCounts.SUPERIOR];
-  const lowEnd    = [...gradeCounts.BAJO];
-  const total     = graded.length;
+  const highEnd = [...gradeCounts.ALTO, ...gradeCounts.SUPERIOR];
+  const lowEnd  = [...gradeCounts.BAJO];
 
-  if (highEnd.length >= Math.floor(total * 0.5) && lowEnd.length >= 1) {
+  if (highEnd.length >= 3 && lowEnd.length >= 1 && lowEnd.length <= 2) {
     const names = lowEnd.map(n => `<b>${n}</b>`).join(", ");
     alerts.push({ type:"warn", msg:`<b>Cuello de botella:</b> ${names} ${lowEnd.length > 1 ? "son componentes" : "es un componente"} de gama baja que podrían limitar el rendimiento del resto del equipo de gama alta.` });
 
-  } else if (lowEnd.length >= Math.floor(total * 0.5) && highEnd.length >= 1) {
+  } else if (lowEnd.length >= 3 && highEnd.length >= 1 && highEnd.length <= 2) {
     const names = highEnd.map(n => `<b>${n}</b>`).join(", ");
     alerts.push({ type:"warn", msg:`<b>Componentes desaprovechados:</b> ${names} ${highEnd.length > 1 ? "son componentes" : "es un componente"} de gama alta que podrían estar siendo limitados por el resto del equipo de gama baja.` });
   }
 }
+
+
+
 export function getSelected() {
   return {
     pm:     sel["PLACA MADRE"],
