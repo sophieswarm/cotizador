@@ -284,8 +284,7 @@
 
   /* TOAST */
   #toast {
-    position: fixed; bottom: 28px; right: 28px; z-index: 999;
-    background: var(--bg-card); border: 1px solid var(--accent);
+    margin-bottom: 16px; background: var(--bg-card); border: 1px solid var(--accent);
     border-radius: 10px; padding: 14px 20px;
     font-size: 13px; color: var(--text);
     box-shadow: 0 8px 32px #000a;
