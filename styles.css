@@ -243,6 +243,83 @@
   }
   .total-label { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; }
   .total-value { font-family: 'Rajdhani', sans-serif; font-size: 30px; font-weight: 700; color: var(--accent); }
+  .total-hint {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .insurance-box {
+    margin-top: 14px;
+  }
+
+  .insurance-header {
+    margin-bottom: 10px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .insurance-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .insurance-tier {
+    padding: 12px 10px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--text);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .insurance-tier:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .insurance-tier.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+  }
+
+  .insurance-tier-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+
+  .insurance-tier-description {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+
+  .insurance-tier-price {
+    margin-top: 4px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  @media (max-width: 900px) {
+    .insurance-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 
   .progress-wrap { margin: 16px 0 0; }
   .progress-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
@@ -272,6 +349,17 @@
     color: var(--white);
   }
   .btn-whatsapp:not(:disabled):hover { transform: translateY(-2px); background: var(--whatsapp-dark); }
+  .whatsapp-alt-link {
+    display: block;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    text-decoration: none;
+  }
+  .whatsapp-alt-link:hover {
+    color: var(--accent);
+  }
 
   /* ─── RESET ─── */
   .btn-reset {

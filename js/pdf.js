@@ -1,5 +1,6 @@
 
 import { sel, COMP_KEYS, WA_NUMBER, STORE_NAME } from './state.js';
+import { getQuoteTotal, getSelectedInsuranceTier } from './pricing.js';
 import { fmt, renderAlerts } from './utils.js';
 
 
@@ -8,6 +9,7 @@ export async function generatePDF() {
   const doc = new jsPDF({ unit:"mm", format:"a4" });
   const W = 210, M = 18;
   let y = 0;
+  const insuranceTier = getSelectedInsuranceTier();
 
   doc.setFillColor(10, 10, 18);
   doc.rect(0, 0, W, 52, "F");
@@ -63,8 +65,23 @@ export async function generatePDF() {
     y += 10;
   });
 
+  if (insuranceTier) {
+    doc.setFillColor(18, 18, 30);
+    doc.rect(M, y - 4.5, W - M * 2, 9, "F");
+
+    doc.setFont("helvetica","bold");   doc.setFontSize(7.5); doc.setTextColor(200, 200, 220);
+    doc.text("SEGURO", M + 3, y);
+    doc.setFont("helvetica","normal"); doc.setTextColor(160, 170, 195);
+    doc.text("--", M + 52, y);
+    doc.text(`${insuranceTier.title} · ${insuranceTier.description}`, M + 75, y);
+
+    doc.setFont("helvetica","bold"); doc.setTextColor(0, 212, 255);
+    doc.text(fmt(insuranceTier.price), W - M - 2, y, { align:"right" });
+    y += 10;
+  }
+
   y += 4;
-  const total = COMP_KEYS.reduce((s, k) => s + (sel[k]?.price || 0), 0);
+  const total = getQuoteTotal();
   doc.setFillColor(26, 26, 46);
   doc.rect(M, y - 5, W - M * 2, 13, "F");
   doc.setDrawColor(0, 212, 255);

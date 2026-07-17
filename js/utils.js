@@ -2,6 +2,7 @@ export function fmt(n) {
   return "$" + n.toLocaleString("es-CL");
 }
 
+//alertas
 export function renderAlerts(alerts, options = {}) {
   const { append = false, autoDismiss = 0 } = options;
   const container = document.getElementById("compat-alerts");
