@@ -4,6 +4,8 @@ import { showMeta, hideMeta }     from './meta.js';
 import { checkCompat }            from './compat.js';
 import { updateSummary, updateTotal } from './summary.js';
 
+const cpuFilterState = { brand: "ALL" };
+
 export function buildCards() {
   const container = document.getElementById("comp-cards");
   container.innerHTML = "";
@@ -26,7 +28,7 @@ function createCard(key) {
       <span class="comp-label">${key}</span>
     </div>
     <div class="comp-body">
-      ${key === "GABINETE" ? buildImageGrid(key, k) : buildSelect(key, k)}
+      ${key === "GABINETE" ? buildImageGrid(key, k) : buildInputByType(key, k)}
       <div class="comp-meta" id="meta-${k}" style="display:none">
         <div class="comp-stock" id="stock-${k}"></div>
       </div>
@@ -40,6 +42,7 @@ function bindCardEvents(container) {
 
   container.addEventListener("change", handleCardSelectChange);
   container.addEventListener("click", handleCaseTileClick);
+  container.addEventListener("click", handleProcessorFilterClick);
   container.dataset.bound = "true";
 }
 
@@ -85,10 +88,89 @@ function handleCaseTileClick(event) {
   refreshQuoteState();
 }
 
+function handleProcessorFilterClick(event) {
+  const btn = event.target.closest(".cpu-filter-btn");
+  if (!btn) return;
+
+  const brand = btn.dataset.brand;
+  if (!brand || cpuFilterState.brand === brand) return;
+
+  cpuFilterState.brand = brand;
+
+  const buttons = document.querySelectorAll(".cpu-filter-btn");
+  buttons.forEach(b => b.classList.toggle("active", b.dataset.brand === brand));
+
+  renderProcessorOptions();
+}
+
 function refreshQuoteState() {
   checkCompat();
   updateSummary();
   updateTotal();
+}
+
+function getProcessorBrand(cpu) {
+  const name = String(cpu?.name ?? "").toUpperCase();
+  if (name.includes("AMD")) return "AMD";
+  if (name.includes("INTEL")) return "INTEL";
+  return "OTHER";
+}
+
+function getFilteredProcessors() {
+  if (cpuFilterState.brand === "ALL") return DATA["PROCESADOR"];
+
+  return DATA["PROCESADOR"].filter(cpu =>
+    getProcessorBrand(cpu) === cpuFilterState.brand
+  );
+}
+
+function renderProcessorOptions() {
+  const select = document.getElementById("sel-PROCESADOR");
+  if (!select) return;
+
+  const processors = getFilteredProcessors();
+  const currentSku = sel["PROCESADOR"]?.sku ?? "";
+  const hasCurrent = processors.some(cpu => cpu.sku === currentSku);
+  const selectedSku = hasCurrent ? currentSku : "";
+
+  const opts = processors.map(cpu =>
+    `<option value="${cpu.sku}" ${cpu.sku === selectedSku ? "selected" : ""}>${cpu.name}</option>`
+  ).join("");
+
+  select.innerHTML = `
+    <option value=""> Seleccionar PROCESADOR </option>
+    ${opts}
+  `;
+
+  select.value = selectedSku;
+
+  if (!selectedSku && sel["PROCESADOR"]) {
+    sel["PROCESADOR"] = null;
+    hideMeta("PROCESADOR");
+    refreshQuoteState();
+  }
+}
+
+function buildInputByType(key, k) {
+  if (key === "PROCESADOR") return buildProcessorSelect();
+  return buildSelect(key, k);
+}
+
+function buildProcessorSelect() {
+  const opts = getFilteredProcessors().map(it =>
+    `<option value="${it.sku}">${it.name}</option>`
+  ).join("");
+
+  return `
+    <div class="cpu-filter" role="group" aria-label="Filtrar procesadores">
+      <button type="button" class="cpu-filter-btn active" data-brand="ALL">Todos</button>
+      <button type="button" class="cpu-filter-btn" data-brand="AMD">AMD</button>
+      <button type="button" class="cpu-filter-btn" data-brand="INTEL">Intel</button>
+    </div>
+    <select id="sel-PROCESADOR" data-key="PROCESADOR">
+      <option value=""> Seleccionar PROCESADOR </option>
+      ${opts}
+    </select>`;
 }
 
 function buildSelect(key, k) {

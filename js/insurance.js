@@ -42,9 +42,18 @@ function renderInsuranceOptions() {
       <button type="button" class="insurance-tier${selectedClass}" data-tier-id="${tier.id}">
         <span class="insurance-tier-title">${tier.title}</span>
         <span class="insurance-tier-description">${tier.description}</span>
-        <span class="insurance-tier-price">${fmt(tier.price)}</span>
+        <span class="insurance-tier-price">${tier.price}</span>
       </button>`;
   }).join('');
 
-  container.innerHTML = `<div class="insurance-grid">${tiers}</div>`;
+  container.innerHTML = `
+    <div class="insurance-grid">${tiers}</div>
+    <a
+      class="insurance-help-link"
+      href="https://invasiongamer.com/garantia-swop"
+      target="_blank"
+      rel="noopener"
+    >
+      Conoce más sobre SWOP+
+    </a>`;
 }
