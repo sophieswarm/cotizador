@@ -6,6 +6,7 @@ import { updateSummary, updateTotal } from './summary.js';
 
 const cpuFilterState = { brand: "ALL" };
 
+//lista de todas las cards de componentes
 export function buildCards() {
   const container = document.getElementById("comp-cards");
   container.innerHTML = "";
@@ -16,6 +17,7 @@ export function buildCards() {
   bindCardEvents(container);
 }
 
+//crea una card
 function createCard(key) {
   const k    = key.replace(/ /g, "_");
   const card = document.createElement("div");
@@ -37,6 +39,7 @@ function createCard(key) {
   return card;
 }
 
+//bind eventos con funciones
 function bindCardEvents(container) {
   if (container.dataset.bound) return;
 
@@ -46,6 +49,7 @@ function bindCardEvents(container) {
   container.dataset.bound = "true";
 }
 
+//seleccionar
 function handleCardSelectChange(event) {
   if (event.target.tagName !== "SELECT") return;
 
@@ -65,6 +69,7 @@ function handleCardSelectChange(event) {
   refreshQuoteState();
 }
 
+//seleccionar gabinete
 function handleCaseTileClick(event) {
   const tile = event.target.closest(".case-tile");
   if (!tile) return;
@@ -88,6 +93,7 @@ function handleCaseTileClick(event) {
   refreshQuoteState();
 }
 
+//filtro de procesador
 function handleProcessorFilterClick(event) {
   const btn = event.target.closest(".cpu-filter-btn");
   if (!btn) return;
@@ -103,12 +109,14 @@ function handleProcessorFilterClick(event) {
   renderProcessorOptions();
 }
 
+//actualizar estado precio
 function refreshQuoteState() {
   checkCompat();
   updateSummary();
   updateTotal();
 }
 
+//determinar marca de procesador
 function getProcessorBrand(cpu) {
   const name = String(cpu?.name ?? "").toUpperCase();
   if (name.includes("AMD")) return "AMD";
@@ -116,6 +124,7 @@ function getProcessorBrand(cpu) {
   return "OTHER";
 }
 
+//filtrar procesadores por marca
 function getFilteredProcessors() {
   if (cpuFilterState.brand === "ALL") return DATA["PROCESADOR"];
 
@@ -124,6 +133,7 @@ function getFilteredProcessors() {
   );
 }
 
+// listar procesadores filtrados
 function renderProcessorOptions() {
   const select = document.getElementById("sel-PROCESADOR");
   if (!select) return;
@@ -150,6 +160,7 @@ function renderProcessorOptions() {
     refreshQuoteState();
   }
 }
+
 
 function buildInputByType(key, k) {
   if (key === "PROCESADOR") return buildProcessorSelect();

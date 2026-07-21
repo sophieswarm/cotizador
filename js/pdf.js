@@ -103,5 +103,5 @@ export async function generatePDF() {
   doc.text(`${STORE_NAME} · whatsapp.me/${WA_NUMBER}`, W / 2, 290, { align:"center" });
 
   doc.save(`Cotizacion_PC_Gamer_${cotNum}.pdf`);
-  renderAlerts([{ type: "warn", msg: "📄 Cotización descargada correctamente" }], { append: true, autoDismiss: 2800 });
+  renderAlerts([{ type: "warn", msg: "Cotización descargada" }], { append: true, autoDismiss: 2800 });
 }
