@@ -13,9 +13,9 @@ export const STORE_NAME = "Invasión Gamer";
 export const ASSEMBLY_FEE = 50000;
 
 export const INSURANCE_TIERS = [
-  { id: "insurance-1y", title: "1 año", description: "Garantía Standard", price: "GRATIS" },
-  { id: "insurance-2y", title: "2 años", description: "Garantía SWOP+", price: "$129.990" },
-  { id: "insurance-3y", title: "3 años", description: "Garantía SWOP+", price: "$219.900" }
+  { id: "insurance-1y", title: "1 año", description: "Garantía Standard", price: 0 },
+  { id: "insurance-2y", title: "2 años", description: "Garantía SWOP+", price: 129990 },
+  { id: "insurance-3y", title: "3 años", description: "Garantía SWOP+", price: 219900 }
 ];
 
 export const sel = {};

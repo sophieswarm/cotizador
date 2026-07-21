@@ -42,7 +42,7 @@ function renderInsuranceOptions() {
       <button type="button" class="insurance-tier${selectedClass}" data-tier-id="${tier.id}">
         <span class="insurance-tier-title">${tier.title}</span>
         <span class="insurance-tier-description">${tier.description}</span>
-        <span class="insurance-tier-price">${tier.price}</span>
+        <span class="insurance-tier-price">${fmt(tier.price)}</span>
       </button>`;
   }).join('');
 
