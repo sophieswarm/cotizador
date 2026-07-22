@@ -1,10 +1,10 @@
 import { COMP_KEYS, ICONS, sel } from './state.js';
-import { DATA }                   from './data.js';
 import { showMeta, hideMeta }     from './meta.js';
 import { checkCompat }            from './compat.js';
 import { updateSummary, updateTotal } from './summary.js';
+import { getFilteredProducts } from './filters.js';
 
-const cpuFilterState = { brand: "ALL" };
+const motherboardFilterState = { vendor: "ALL" };
 
 //lista de todas las cards de componentes
 export function buildCards() {
@@ -45,7 +45,7 @@ function bindCardEvents(container) {
 
   container.addEventListener("change", handleCardSelectChange);
   container.addEventListener("click", handleCaseTileClick);
-  container.addEventListener("click", handleProcessorFilterClick);
+  container.addEventListener("click", handleVendorFilterClick);
   container.dataset.bound = "true";
 }
 
@@ -61,9 +61,13 @@ function handleCardSelectChange(event) {
     sel[key] = null;
     hideMeta(k);
   } else {
-    const item = DATA[key].find(i => i.sku === sku);
+    const item = getFilteredProducts(key, sel, motherboardFilterState.vendor).find(i => i.sku === sku);
     sel[key] = item;
     showMeta(k, item);
+  }
+
+  if (key === "PLACA MADRE") {
+    syncSelectionWithFilter("PROCESADOR");
   }
 
   refreshQuoteState();
@@ -85,7 +89,7 @@ function handleCaseTileClick(event) {
     hideMeta(k);
   } else {
     tile.classList.add("selected");
-    const item = DATA[key].find(i => i.sku === sku);
+    const item = getFilteredProducts(key, sel).find(i => i.sku === sku);
     sel[key] = item;
     showMeta(k, item);
   }
@@ -93,20 +97,31 @@ function handleCaseTileClick(event) {
   refreshQuoteState();
 }
 
-//filtro de procesador
-function handleProcessorFilterClick(event) {
-  const btn = event.target.closest(".cpu-filter-btn");
-  if (!btn) return;
+function handleVendorFilterClick(event) {
+  const button = event.target.closest(".vendor-filter-btn");
+  if (!button) return;
 
-  const brand = btn.dataset.brand;
-  if (!brand || cpuFilterState.brand === brand) return;
+  const vendor = button.dataset.vendor;
+  motherboardFilterState.vendor = vendor;
 
-  cpuFilterState.brand = brand;
+  const visibleMotherboards = getFilteredProducts("PLACA MADRE", sel, motherboardFilterState.vendor);
+  const selectedMotherboard = sel["PLACA MADRE"];
 
-  const buttons = document.querySelectorAll(".cpu-filter-btn");
-  buttons.forEach(b => b.classList.toggle("active", b.dataset.brand === brand));
+  if (selectedMotherboard) {
+    const isStillVisible = visibleMotherboards.some(item => item.sku === selectedMotherboard.sku);
+    if (!isStillVisible) {
+      sel["PLACA MADRE"] = visibleMotherboards[0] ?? null;
+      if (sel["PLACA MADRE"]) {
+        showMeta("PLACA_MADRE", sel["PLACA MADRE"]);
+      } else {
+        hideMeta("PLACA_MADRE");
+      }
+    }
+  }
 
-  renderProcessorOptions();
+  syncSelectionWithFilter("PROCESADOR");
+  buildCards();
+  refreshQuoteState();
 }
 
 //actualizar estado precio
@@ -116,68 +131,43 @@ function refreshQuoteState() {
   updateTotal();
 }
 
-//determinar marca de procesador
-function getProcessorBrand(cpu) {
-  const name = String(cpu?.name ?? "").toUpperCase();
-  if (name.includes("AMD")) return "AMD";
-  if (name.includes("INTEL")) return "INTEL";
-  return "OTHER";
-}
+function syncSelectionWithFilter(key) {
+  const visibleItems = getFilteredProducts(key, sel, motherboardFilterState.vendor);
+  const selected = sel[key];
 
-//filtrar procesadores por marca
-function getFilteredProcessors() {
-  if (cpuFilterState.brand === "ALL") return DATA["PROCESADOR"];
+  if (!selected) return;
 
-  return DATA["PROCESADOR"].filter(cpu =>
-    getProcessorBrand(cpu) === cpuFilterState.brand
-  );
-}
-
-// listar procesadores filtrados
-function renderProcessorOptions() {
-  const select = document.getElementById("sel-PROCESADOR");
-  if (!select) return;
-
-  const processors = getFilteredProcessors();
-  const currentSku = sel["PROCESADOR"]?.sku ?? "";
-  const hasCurrent = processors.some(cpu => cpu.sku === currentSku);
-  const selectedSku = hasCurrent ? currentSku : "";
-
-  const opts = processors.map(cpu =>
-    `<option value="${cpu.sku}" ${cpu.sku === selectedSku ? "selected" : ""}>${cpu.name}</option>`
-  ).join("");
-
-  select.innerHTML = `
-    <option value=""> Seleccionar PROCESADOR </option>
-    ${opts}
-  `;
-
-  select.value = selectedSku;
-
-  if (!selectedSku && sel["PROCESADOR"]) {
-    sel["PROCESADOR"] = null;
-    hideMeta("PROCESADOR");
-    refreshQuoteState();
+  const isStillVisible = visibleItems.some(item => item.sku === selected.sku);
+  if (!isStillVisible) {
+    sel[key] = null;
+    hideMeta(key.replace(/ /g, "_"));
   }
 }
 
-
 function buildInputByType(key, k) {
+  if (key === "PLACA MADRE") return buildMotherboardFilters();
   if (key === "PROCESADOR") return buildProcessorSelect();
   return buildSelect(key, k);
 }
 
+function buildMotherboardFilters() {
+  const activeVendor = motherboardFilterState.vendor;
+  return `
+    <div class="vendor-filter" role="group" aria-label="Filtrar placas madre">
+      <button type="button" class="vendor-filter-btn ${activeVendor === "ALL" ? "active" : ""}" data-vendor="ALL">Todos</button>
+      <button type="button" class="vendor-filter-btn ${activeVendor === "AMD" ? "active" : ""}" data-vendor="AMD">AMD</button>
+      <button type="button" class="vendor-filter-btn ${activeVendor === "INTEL" ? "active" : ""}" data-vendor="INTEL">Intel</button>
+    </div>
+    ${buildSelect("PLACA MADRE", "PLACA_MADRE")}
+  `;
+}
+
 function buildProcessorSelect() {
-  const opts = getFilteredProcessors().map(it =>
+  const opts = getFilteredProducts("PROCESADOR", sel, motherboardFilterState.vendor).map(it =>
     `<option value="${it.sku}">${it.name}</option>`
   ).join("");
 
   return `
-    <div class="cpu-filter" role="group" aria-label="Filtrar procesadores">
-      <button type="button" class="cpu-filter-btn active" data-brand="ALL">Todos</button>
-      <button type="button" class="cpu-filter-btn" data-brand="AMD">AMD</button>
-      <button type="button" class="cpu-filter-btn" data-brand="INTEL">Intel</button>
-    </div>
     <select id="sel-PROCESADOR" data-key="PROCESADOR">
       <option value=""> Seleccionar PROCESADOR </option>
       ${opts}
@@ -185,7 +175,7 @@ function buildProcessorSelect() {
 }
 
 function buildSelect(key, k) {
-  const opts = DATA[key].map(it =>
+  const opts = getFilteredProducts(key, sel, motherboardFilterState.vendor).map(it =>
     `<option value="${it.sku}">${it.name}</option>`
   ).join("");
   return `
@@ -196,7 +186,7 @@ function buildSelect(key, k) {
 }
 
 function buildImageGrid(key, k) {
-  const tiles = DATA[key].map(it => `
+  const tiles = getFilteredProducts(key, sel, motherboardFilterState.vendor).map(it => `
     <div class="case-tile" data-sku="${it.sku}" title="${it.name}">
       <img src="${it.image ?? ''}" alt="${it.name}" />
       <div class="case-tile-name">${it.name}</div>

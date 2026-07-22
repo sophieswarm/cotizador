@@ -13,7 +13,7 @@ export function renderAlerts(alerts, options = {}) {
   alerts.forEach(a => {
     const alert = document.createElement("div");
     alert.className = `alert alert-${a.type}`;
-    alert.innerHTML = `<span class="alert-icon">${a.type === "danger" ? "🔴" : "🟡"}</span><div>${a.msg}</div>`;
+    alert.innerHTML = `<span class="alert-icon">${a.type === "danger" ? "!" : "!"}</span><div>${a.msg}</div>`;
     if (append) container.insertAdjacentElement("afterbegin", alert);
     else container.appendChild(alert);
 
