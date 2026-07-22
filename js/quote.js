@@ -6,7 +6,7 @@ import { fmt } from './utils.js';
 
 export function buildComponentQuoteLines() {
   return COMP_KEYS.map((key) =>
-    `• ${key}: ${sel[key].name} (${sel[key].sku}) — ${fmt(sel[key].price)}`
+    `• ${key}: ${sel[key].name}`
   ).join('\n');
 }
 
